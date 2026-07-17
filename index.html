@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#05070b">
+  <title>Injective Portfolio</title>
+  <link rel="stylesheet" href="style.css?v=4.2.0">
+  <script defer src="app.js?v=4.2.0"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">INJECTIVE</p>
+        <h1>Portfolio Dashboard</h1>
+        <p class="subtitle">Prezzo, staking e reward in tempo reale</p>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button" id="privacyButton" aria-label="Privacy">◉</button>
+        <button class="icon-button" id="themeButton" aria-label="Tema">☾</button>
+      </div>
+    </header>
+
+    <nav class="view-tabs" aria-label="Sezioni dashboard">
+      <button class="view-tab active" data-view="dashboard">Dashboard</button>
+      <button class="view-tab" data-view="portfolio">Portfolio</button>
+      <button class="view-tab" data-view="market">Market</button>
+      <button class="view-tab" data-view="withdrawals">Activity</button>
+    </nav>
+
+    <section class="wallet-panel" aria-label="Wallet">
+      <label for="addressInput">Wallet Injective</label>
+      <div class="wallet-form">
+        <input id="addressInput" autocomplete="off" spellcheck="false" placeholder="inj1…">
+        <button id="loadButton" class="primary-button">Carica</button>
+      </div>
+      <div class="status-row">
+        <span class="status-pill" id="statusPill"><i></i><span id="statusText">Avvio…</span></span>
+        <span id="lastUpdate">Mai aggiornato</span>
+      </div>
+    </section>
+
+    <main>
+      <div class="view-page active" id="dashboardView">
+      <section class="hero-grid">
+        <article class="card hero-card">
+          <div class="card-heading"><span>Net Worth</span><span class="live-badge">LIVE</span></div>
+          <strong class="hero-value private" id="netWorthUsd">$0.00</strong>
+          <span class="secondary-value private" id="netWorthInj">0.0000 INJ</span>
+          <div class="chart-wrap"><canvas id="netWorthChart" class="chart" aria-label="Grafico net worth"></canvas><div class="chart-tooltip" id="netWorthTooltip"></div></div>
+        </article>
+
+
+      </section>
+
+      <section class="metric-grid">
+        <article class="card metric-card"><span>Disponibile</span><strong class="private" id="availableInj">0.000000</strong><small class="private" id="availableUsd">$0.00</small></article>
+        <article class="card metric-card"><span>In staking</span><strong class="private" id="stakedInj">0.0000</strong><small class="private" id="stakedUsd">$0.00</small></article>
+        <article class="card metric-card"><span>Reward</span><strong class="private" id="rewardsInj">0.000000</strong><small class="private" id="rewardsUsd">$0.00</small></article>
+        <article class="card metric-card"><span>APR netto stimato</span><strong id="aprValue">—</strong><small id="dailyEstimate">— INJ/giorno</small></article>
+        <article class="card metric-card"><span>Market Cap INJ</span><strong id="marketCapValue">—</strong><small id="marketCapRank">CoinGecko</small></article>
+        <article class="card metric-card"><span>Commissione media</span><strong id="commissionValue">—</strong><small id="networkAprValue">APR rete lordo —</small></article>
+      </section>
+
+      <section class="validator-section">
+        <article class="card validator-card">
+          <div class="card-heading"><span>Validator collegati</span><span id="validatorCount">Nessuna delegazione</span></div>
+          <div class="validator-list" id="validatorList">
+            <div class="validator-empty">Carica un wallet per vedere i validator.</div>
+          </div>
+          <p class="formula-note" id="aprMethod">APR calcolato dai dati on-chain e al netto delle commissioni.</p>
+        </article>
+      </section>
+
+      <section class="detail-grid">
+        <article class="card target-card">
+          <div class="card-heading"><span>Obiettivo staking</span><button id="targetButton" class="text-button">Modifica</button></div>
+          <div class="target-values"><strong class="private" id="targetCurrent">0.00 INJ</strong><span id="targetMax">1,000 INJ</span></div>
+          <div class="progress"><div id="targetFill"></div></div>
+          <p id="targetPercent">0.00% completato</p>
+        </article>
+
+        <article class="card estimates-card">
+          <div class="card-heading"><span>Proiezione reward</span><span>APR attuale</span></div>
+          <div class="estimate-list">
+            <div><span>6 ore</span><strong class="private" id="reward6h">—</strong></div>
+            <div><span>1 giorno</span><strong class="private" id="reward1d">—</strong></div>
+            <div><span>1 settimana</span><strong class="private" id="reward1w">—</strong></div>
+            <div><span>1 mese</span><strong class="private" id="reward1m">—</strong></div>
+            <div><span>1 anno</span><strong class="private" id="reward1y">—</strong></div>
+          </div>
+        </article>
+      </section>
+      </div>
+
+      <div class="view-page" id="portfolioView">
+        <section class="metric-grid">
+          <article class="card metric-card"><span>Patrimonio totale</span><strong class="private" id="portfolioNetWorth">$0.00</strong><small class="private" id="portfolioTotalInj">0.0000 INJ</small></article>
+          <article class="card metric-card"><span>APR netto</span><strong id="portfolioApr">—</strong><small id="portfolioDaily">— INJ/giorno</small></article>
+          <article class="card metric-card"><span>Reward da riscuotere</span><strong class="private" id="portfolioRewards">0.000000 INJ</strong><small class="private" id="portfolioRewardsUsd">$0.00</small></article>
+        </section>
+        <article class="card hero-card full-card">
+          <div class="card-heading"><span>Storico Net Worth</span><span>Persistente</span></div>
+          <div class="chart-wrap"><canvas id="portfolioNetWorthChart" class="chart large" aria-label="Storico Net Worth"></canvas><div class="chart-tooltip" id="portfolioNetWorthTooltip"></div></div>
+        </article>
+      </div>
+
+      <div class="view-page" id="marketView">
+        <article class="card market-terminal">
+          <div class="market-head">
+            <div><span class="eyebrow">INJ / USDT</span><strong id="marketPrice">$0.0000</strong><small id="marketChange">—</small></div>
+            <div class="timeframe-tabs" id="timeframeTabs">
+              <button data-tf="1h">1H</button><button class="active" data-tf="24h">24H</button><button data-tf="7d">7D</button><button data-tf="1m">1M</button><button data-tf="1y">1Y</button><button data-tf="all">ALL</button>
+            </div>
+          </div>
+          <div class="ohlc-grid"><span>Open <b id="ohlcOpen">—</b></span><span>High <b id="ohlcHigh">—</b></span><span>Low <b id="ohlcLow">—</b></span><span>Close <b id="ohlcClose">—</b></span><span>Volume <b id="ohlcVolume">—</b></span></div>
+          <div class="chart-wrap market-wrap"><canvas id="marketChart" class="chart market-chart" aria-label="Grafico mercato INJ"></canvas><div class="chart-tooltip" id="marketTooltip"></div></div>
+        </article>
+      </div>
+
+      <div class="view-page" id="withdrawalsView">
+        <section class="withdrawal-summary metric-grid">
+          <article class="card metric-card"><span>Reward ritirati totali</span><strong class="private" id="withdrawnTotalInj">0.000000</strong><small class="private" id="withdrawnTotalUsd">$0.00 al prezzo attuale</small></article>
+          <article class="card metric-card"><span>Prelievi trovati</span><strong id="withdrawalCount">0</strong><small id="withdrawalRange">Storico on-chain</small></article>
+          <article class="card metric-card"><span>Ultimo prelievo</span><strong class="private" id="lastWithdrawalInj">—</strong><small id="lastWithdrawalDate">Nessun prelievo</small></article>
+        </section>
+
+        <article class="card withdrawal-card">
+          <div class="card-heading">
+            <span>Storico reward ritirati</span>
+            <button id="refreshWithdrawals" class="text-button">Aggiorna</button>
+          </div>
+          <p class="formula-note">Importi rilevati scansionando anche le transazioni storiche on-chain. Il primo caricamento può richiedere più richieste; il controvalore USD usa il prezzo INJ attuale.</p>
+          <div class="withdrawal-list" id="withdrawalList">
+            <div class="validator-empty">Carica un wallet per vedere lo storico.</div>
+          </div>
+          <button id="loadMoreWithdrawals" class="secondary-button" hidden>Carica altri</button>
+        </article>
+      </div>
+    </main>
+
+    <footer><span>Injective Portfolio v4.2.0</span><span id="endpointLabel">API: —</span></footer>
+  </div>
+
+  <dialog id="targetDialog">
+    <form method="dialog">
+      <h2>Obiettivo staking</h2>
+      <label for="targetInput">INJ desiderati</label>
+      <input id="targetInput" type="number" min="1" step="1" value="1000">
+      <div class="dialog-actions"><button value="cancel">Annulla</button><button id="saveTarget" value="default" class="primary-button">Salva</button></div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
