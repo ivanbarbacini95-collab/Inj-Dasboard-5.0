@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#05070b">
+  <title>INJ Terminal v5.1</title>
+  <link rel="stylesheet" href="style.css?v=5.1.0">
+  <script defer src="app.js?v=5.1.0"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="header-search" id="headerSearch">
+        <button class="icon-button search-toggle" id="searchToggle" aria-label="Cerca wallet" aria-expanded="false">⌕</button>
+        <div class="search-shell" id="searchShell">
+          <input id="addressInput" autocomplete="off" spellcheck="false" placeholder="inj1…" aria-label="Indirizzo wallet Injective">
+          <button id="loadButton" class="search-submit" aria-label="Carica wallet">↵</button>
+        </div>
+      </div>
+
+      <div class="brand-center">
+        <p class="eyebrow">INJECTIVE</p>
+        <h1>INJ Terminal</h1>
+        <p class="subtitle">Portfolio intelligence in tempo reale</p>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-button" id="focusButton" aria-label="Modalità Focus" title="Modalità Focus (F)">⌗</button>
+        <button class="icon-button" id="privacyButton" aria-label="Privacy">◉</button>
+        <button class="icon-button" id="themeButton" aria-label="Tema">☾</button>
+      </div>
+    </header>
+
+    <div class="compact-status">
+      <span class="status-pill" id="statusPill"><i></i><span id="statusText">Avvio…</span></span>
+      <span id="lastUpdate">Mai aggiornato</span>
+    </div>
+
+    <section class="wallet-tabs-panel" aria-label="Wallet monitorati">
+      <div class="wallet-tabs" id="walletTabs"></div>
+      <button class="wallet-tab-add" id="addWalletTab" type="button" aria-label="Aggiungi wallet">＋</button>
+    </section>
+
+    <nav class="view-tabs" aria-label="Sezioni dashboard">
+      <button class="view-tab active" data-view="dashboard">Dashboard</button>
+      <button class="view-tab" data-view="withdrawals">Activity</button>
+    </nav>
+
+    <main>
+      <div class="view-page active" id="dashboardView">
+      <article class="card inj-price-card" aria-label="Prezzo Injective in tempo reale">
+        <div class="inj-price-topline">
+          <div>
+            <span class="eyebrow">INJ / USDT</span>
+            <span class="price-card-label">Injective Price</span>
+          </div>
+          <span class="live-badge"><i></i> LIVE</span>
+        </div>
+        <div class="inj-price-row">
+          <strong id="marketPrice" class="inj-live-price">$0.0000</strong>
+          <small id="marketChange" class="inj-live-change">—</small>
+        </div>
+      </article>
+
+      <article class="card market-terminal dashboard-market">
+        <div class="market-head chart-control-head">
+          <div>
+            <span class="eyebrow">MARKET CHART</span>
+            <strong class="chart-title">Andamento INJ</strong>
+          </div>
+          <div class="timeframe-tabs" id="timeframeTabs">
+            <button data-tf="1min">1 MIN</button><button class="active" data-tf="1h">1H</button><button data-tf="1d">1D</button><button data-tf="1w">1W</button><button data-tf="1mo">1M</button><button data-tf="1y">1Y</button><button data-tf="all">ALL</button>
+          </div>
+        </div>
+        <div class="ohlc-grid"><span>Open <b id="ohlcOpen">—</b></span><span>High <b id="ohlcHigh">—</b></span><span>Low <b id="ohlcLow">—</b></span><span>Close <b id="ohlcClose">—</b></span><span>Volume <b id="ohlcVolume">—</b></span></div>
+        <div class="chart-wrap market-wrap"><canvas id="marketChart" class="chart market-chart" aria-label="Grafico prezzo INJ"></canvas><div class="chart-tooltip" id="marketTooltip"></div></div>
+      </article>
+
+      <section class="hero-grid">
+        <article class="card hero-card">
+          <div class="card-heading"><span>Net Worth</span><span class="live-badge">LIVE</span></div>
+          <strong class="hero-value private" id="netWorthUsd">$0.00</strong>
+          <span class="secondary-value private" id="netWorthInj">0.0000 INJ</span>
+          <div class="chart-wrap"><canvas id="netWorthChart" class="chart" aria-label="Grafico net worth"></canvas><div class="chart-tooltip" id="netWorthTooltip"></div></div>
+        </article>
+
+
+      </section>
+
+      <section class="metric-grid">
+        <article class="card metric-card"><span>Disponibile</span><strong class="private" id="availableInj">0.000000</strong><small class="private" id="availableUsd">$0.00</small></article>
+        <article class="card metric-card"><span>In staking</span><strong class="private" id="stakedInj">0.0000</strong><small class="private" id="stakedUsd">$0.00</small></article>
+        <article class="card metric-card"><span>Reward</span><strong class="private" id="rewardsInj">0.000000</strong><small class="private" id="rewardsUsd">$0.00</small></article>
+        <article class="card metric-card"><span>APR netto stimato</span><strong id="aprValue">—</strong><small id="dailyEstimate">— INJ/giorno</small></article>
+        <article class="card metric-card"><span>Market Cap INJ</span><strong id="marketCapValue">—</strong><small id="marketCapRank">CoinGecko</small></article>
+        <article class="card metric-card"><span>Commissione media</span><strong id="commissionValue">—</strong><small id="networkAprValue">APR rete lordo —</small></article>
+      </section>
+
+      <section class="insights-section">
+        <div class="section-title-row">
+          <div><span class="validator-kicker">PORTFOLIO INTELLIGENCE</span><h2>Insight</h2></div>
+          <span class="live-badge"><i></i> LIVE</span>
+        </div>
+
+        <section class="insight-grid">
+          <article class="card insight-card performance-card">
+            <div class="insight-heading"><span>Performance portfolio</span><small>Variazione del Net Worth</small></div>
+            <div class="performance-grid">
+              <div><span>Oggi</span><strong id="perf1d">—</strong></div>
+              <div><span>7 giorni</span><strong id="perf7d">—</strong></div>
+              <div><span>30 giorni</span><strong id="perf30d">—</strong></div>
+              <div><span>All time</span><strong id="perfAll">—</strong></div>
+            </div>
+          </article>
+
+          <article class="card insight-card reward-speed-card">
+            <div class="insight-heading"><span>Reward Speed</span><small>Velocità stimata attuale</small></div>
+            <strong class="focus-value" id="rewardPerSecond">—</strong>
+            <span class="focus-sub" id="oneInjEta">—</span>
+          </article>
+
+          <article class="card insight-card sync-card">
+            <div class="insight-heading"><span>Prossimo aggiornamento</span><small>Dati staking on-chain</small></div>
+            <strong class="focus-value" id="syncCountdown">00:30</strong>
+            <div class="mini-progress"><i id="syncProgress"></i></div>
+          </article>
+
+          <article class="card insight-card allocation-card">
+            <div class="insight-heading"><span>Allocazione</span><small>Stake e liquidità</small></div>
+            <div class="allocation-layout">
+              <div class="allocation-ring" id="allocationRing"><span id="stakeAllocation">0%</span></div>
+              <div class="allocation-legend"><span><i class="stake-dot"></i>Stake <b id="stakeAllocationText">0%</b></span><span><i class="liquid-dot"></i>Liquidità <b id="liquidAllocationText">0%</b></span></div>
+            </div>
+          </article>
+
+          <article class="card insight-card ath-card">
+            <div class="insight-heading"><span>Highest Net Worth</span><small>Record personale salvato</small></div>
+            <strong class="focus-value private" id="athValue">—</strong>
+            <span class="focus-sub" id="athDate">—</span>
+            <span class="new-ath" id="newAthBadge" hidden>NEW ATH</span>
+          </article>
+
+          <article class="card insight-card milestone-card">
+            <div class="insight-heading"><span>Prossimo obiettivo</span><small id="milestoneRemaining">—</small></div>
+            <div class="milestone-values"><strong id="milestoneGoal">—</strong><span id="milestonePercent">0%</span></div>
+            <div class="goal-progress"><i id="milestoneBar"></i></div>
+            <span class="focus-sub" id="milestoneEta">—</span>
+          </article>
+
+          <article class="card insight-card sentiment-card">
+            <div class="insight-heading"><span>Market Sentiment</span><small>Momentum INJ sintetico</small></div>
+            <strong class="focus-value" id="sentimentLabel">Neutrale</strong>
+            <div class="sentiment-track"><i id="sentimentBar"></i></div>
+            <span class="focus-sub" id="sentimentScore">50 / 100</span>
+          </article>
+
+          <article class="card insight-card heatmap-card">
+            <div class="insight-heading"><span>Storico Reward</span><small>Attività recente salvata localmente</small></div>
+            <div class="reward-heatmap" id="rewardHeatmap" aria-label="Heatmap reward"></div>
+          </article>
+        </section>
+
+        <article class="card achievements-card">
+          <div class="insight-heading"><span>Achievement</span><small>Traguardi del portfolio</small></div>
+          <div class="achievement-list" id="achievementList"></div>
+        </article>
+      </section>
+
+
+      <section class="v5-command-center" id="commandCenter">
+        <article class="card health-card-v5">
+          <div class="v5-heading"><div><span class="validator-kicker">SYSTEM</span><h2>Portfolio Health</h2></div><strong id="healthScore">—</strong></div>
+          <div class="health-track"><i id="healthBar"></i></div>
+          <div class="health-items" id="healthItems"></div>
+        </article>
+
+        <article class="card smart-insights-card">
+          <div class="v5-heading"><div><span class="validator-kicker">INTELLIGENCE</span><h2>Insights automatici</h2></div><span class="live-badge"><i></i> LIVE</span></div>
+          <div class="smart-insight-list" id="smartInsightList"><p>Carica un wallet per generare gli insight.</p></div>
+        </article>
+
+        <article class="card activity-stream-card">
+          <div class="v5-heading"><div><span class="validator-kicker">TERMINAL</span><h2>Live Activity</h2></div><button class="text-button" id="clearActivity">Pulisci</button></div>
+          <div class="activity-stream" id="activityStream"><p class="empty-line">In attesa di attività…</p></div>
+        </article>
+
+        <article class="card performance-monitor-card">
+          <div class="v5-heading"><div><span class="validator-kicker">PERFORMANCE</span><h2>Monitor</h2></div><span id="monitorStatus" class="status-mini">ONLINE</span></div>
+          <div class="monitor-grid">
+            <div><span>API</span><strong id="apiLatency">— ms</strong></div>
+            <div><span>WS</span><strong id="wsMonitor">—</strong></div>
+            <div><span>Refresh</span><strong id="refreshMonitor">30 s</strong></div>
+            <div><span>Storage</span><strong id="storageMonitor">—</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="timeline-section" id="timelineSection">
+        <article class="card timeline-card">
+          <div class="v5-heading"><div><span class="validator-kicker">HISTORY</span><h2>Portfolio Time Machine</h2></div><div class="timeline-actions"><button class="text-button" id="liveTimeline">LIVE</button><button class="secondary-button compact" id="replayPortfolio">▶ Replay</button></div></div>
+          <input type="range" id="timelineSlider" min="0" max="0" value="0" step="1" disabled>
+          <div class="timeline-meta"><span id="timelineDate">Lo storico inizierà dal primo salvataggio</span><strong id="timelineMode">LIVE</strong></div>
+        </article>
+      </section>
+
+      <section class="events-section">
+        <article class="card events-card">
+          <div class="v5-heading"><div><span class="validator-kicker">INJECTIVE</span><h2>Event Center</h2></div><button class="text-button" id="addEventButton">+ Evento</button></div>
+          <div class="event-list" id="eventList"><p class="empty-line">Nessun evento configurato.</p></div>
+        </article>
+      </section>
+
+      <section class="validator-section">
+        <article class="card validator-card">
+          <div class="validator-header">
+            <div>
+              <span class="validator-kicker">STAKING</span>
+              <h2>Validator</h2>
+            </div>
+            <span class="validator-count-pill" id="validatorCount">Nessuna delegazione</span>
+          </div>
+
+          <div class="validator-list" id="validatorList">
+            <div class="validator-empty">Carica un wallet per vedere i validator.</div>
+          </div>
+
+          <div class="reward-projection">
+            <div class="projection-heading">
+              <div>
+                <span>Reward stimati</span>
+                <small>Calcolati con l’APR netto attuale</small>
+              </div>
+            </div>
+            <div class="projection-grid">
+              <div class="projection-item"><span>Oggi</span><strong class="private" id="reward1d">—</strong></div>
+              <div class="projection-item"><span>7 giorni</span><strong class="private" id="reward1w">—</strong></div>
+              <div class="projection-item"><span>30 giorni</span><strong class="private" id="reward1m">—</strong></div>
+              <div class="projection-item"><span>1 anno</span><strong class="private" id="reward1y">—</strong></div>
+            </div>
+          </div>
+
+          <p class="formula-note" id="aprMethod">APR calcolato dai dati on-chain e al netto delle commissioni.</p>
+        </article>
+      </section>
+      </div>
+
+      <div class="view-page" id="withdrawalsView">
+        <section class="withdrawal-summary metric-grid">
+          <article class="card metric-card"><span>Reward ritirati totali</span><strong class="private" id="withdrawnTotalInj">0.000000</strong><small class="private" id="withdrawnTotalUsd">$0.00 al prezzo attuale</small></article>
+          <article class="card metric-card"><span>Prelievi trovati</span><strong id="withdrawalCount">0</strong><small id="withdrawalRange">Storico on-chain</small></article>
+          <article class="card metric-card"><span>Ultimo prelievo</span><strong class="private" id="lastWithdrawalInj">—</strong><small id="lastWithdrawalDate">Nessun prelievo</small></article>
+        </section>
+
+        <article class="card withdrawal-card">
+          <div class="card-heading">
+            <span>Storico reward ritirati</span>
+            <button id="refreshWithdrawals" class="text-button">Aggiorna</button>
+          </div>
+          <p class="formula-note">Importi rilevati scansionando anche le transazioni storiche on-chain. Il primo caricamento può richiedere più richieste; il controvalore USD usa il prezzo INJ attuale.</p>
+          <div class="withdrawal-list" id="withdrawalList">
+            <div class="validator-empty">Carica un wallet per vedere lo storico.</div>
+          </div>
+          <button id="loadMoreWithdrawals" class="secondary-button" hidden>Carica altri</button>
+        </article>
+      </div>
+    </main>
+
+    <footer><span>INJ Terminal v5.1 · Multi-wallet</span><span id="endpointLabel">API: —</span></footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog id="eventDialog" class="event-dialog">
+    <form method="dialog" id="eventForm">
+      <h3>Aggiungi evento</h3>
+      <label>Titolo<input id="eventTitle" required maxlength="60" placeholder="Governance, upgrade, summit…"></label>
+      <label>Data e ora<input id="eventDate" type="datetime-local" required></label>
+      <div class="dialog-actions"><button value="cancel" class="text-button">Annulla</button><button value="default" id="saveEvent" class="secondary-button">Salva</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
